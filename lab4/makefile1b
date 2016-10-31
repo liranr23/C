@@ -1,0 +1,27 @@
+#format is target-name: target dependencies
+#{-tab-}actions
+
+# All Targets
+all: line_splitter
+
+# Tool invocations
+# Executable "line_splitter" depends on the files *.o.
+line_splitter: start.o task1b.o util.o
+	ld -melf_i386 start.o task1b.o util.o -o line_splitter
+
+	
+start.o: start.s
+	nasm -f elf start.s -o start.o
+# Depends on the source and header files
+util.o: util.c
+	gcc -m32 -Wall -ansi -c -nostdlib -fno-stack-protector util.c -o util.o
+
+task1b.o: task1b.c 
+	gcc -m32 -Wall -ansi -c -nostdlib -fno-stack-protector task1b.c -o task1b.o
+
+#tell make that "clean" is not a file name!
+.PHONY: clean
+
+#Clean the build directory
+clean: 
+	rm -f *.o line_splitter

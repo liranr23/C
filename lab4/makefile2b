@@ -1,0 +1,27 @@
+#format is target-name: target dependencies
+#{-tab-}actions
+
+# All Targets
+all: flame2
+
+# Tool invocations
+# Executable "flame2" depends on the files *.o.
+flame2: start.o task2b.o util.o
+	ld -melf_i386 start.o task2b.o util.o -o flame2
+
+	
+start.o: start.s
+	nasm -f elf start.s -o start.o
+# Depends on the source and header files
+util.o: util.c
+	gcc -m32 -Wall -ansi -c -nostdlib -fno-stack-protector util.c -o util.o
+
+task2b.o: task2b.c 
+	gcc -m32 -Wall -ansi -c -nostdlib -fno-stack-protector task2b.c -o task2b.o
+
+#tell make that "clean" is not a file name!
+.PHONY: clean
+
+#Clean the build directory
+clean: 
+	rm -f *.o flame2
